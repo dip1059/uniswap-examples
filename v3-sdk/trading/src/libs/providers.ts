@@ -62,7 +62,8 @@ export async function connectBrowserExtensionWallet() {
   const provider = new ethers.providers.Web3Provider(ethereum)
   const accounts = await provider.send('eth_requestAccounts', [])
 
-  if (accounts.length !== 1) {
+  if (accounts.length == 0) {
+    alert('No account found!!')
     return
   }
 

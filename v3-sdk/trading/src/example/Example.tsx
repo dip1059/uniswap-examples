@@ -28,12 +28,12 @@ const Example = () => {
 
   const [tokenInBalance, setTokenInBalance] = useState<string>()
   const [tokenOutBalance, setTokenOutBalance] = useState<string>()
-  const [blockNumber, setBlockNumber] = useState<number>(0)
+  const [blockNumber, _setBlockNumber] = useState<number>(0)
 
   // Listen for new blocks and update the wallet
-  useOnBlockUpdated(async (blockNumber: number) => {
+  useOnBlockUpdated(async (_blockNumber: number) => {
     refreshBalances()
-    setBlockNumber(blockNumber)
+    // setBlockNumber(blockNumber)
   })
 
   // Update wallet state given a block number
@@ -43,10 +43,10 @@ const Example = () => {
     if (!address || !provider) {
       return
     }
-
     setTokenInBalance(
       await getCurrencyBalance(provider, address, CurrentConfig.tokens.in)
     )
+
     setTokenOutBalance(
       await getCurrencyBalance(provider, address, CurrentConfig.tokens.out)
     )

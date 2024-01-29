@@ -32,6 +32,7 @@ export async function quote(): Promise<string> {
   return toReadableAmount(quotedAmountOut, CurrentConfig.tokens.out.decimals)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getPoolConstants(): Promise<{
   token0: string
   token1: string
@@ -44,11 +45,14 @@ async function getPoolConstants(): Promise<{
     fee: CurrentConfig.tokens.poolFee,
   })
 
+  console.log('pool: ', currentPoolAddress)
+
   const poolContract = new ethers.Contract(
     currentPoolAddress,
     IUniswapV3PoolABI.abi,
     getProvider()
   )
+
   const [token0, token1, fee] = await Promise.all([
     poolContract.token0(),
     poolContract.token1(),

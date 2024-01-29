@@ -16,7 +16,9 @@ const Example = () => {
         <h2 className="error">Please set your mainnet RPC URL in config.ts</h2>
       )}
       <h3>{`Quote input amount: ${CurrentConfig.tokens.amountIn} ${CurrentConfig.tokens.in.symbol}`}</h3>
-      <h3>{`Quote output amount: ${outputAmount} ${CurrentConfig.tokens.out.symbol}`}</h3>
+      <h3>{`Quote output amount: ${outputAmount || 0} ${
+        CurrentConfig.tokens.out.symbol
+      }`}</h3>
       <button onClick={onQuote}>
         <p>Quote</p>
       </button>

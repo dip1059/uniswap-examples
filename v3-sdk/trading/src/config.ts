@@ -1,7 +1,7 @@
 import { Token } from '@uniswap/sdk-core'
 import { FeeAmount } from '@uniswap/v3-sdk'
 
-import { USDC_TOKEN, WETH_TOKEN } from './libs/constants'
+import { DKFT20_TOKEN, USDC_TOKEN, WETH_TOKEN } from './libs/constants'
 
 // Sets if the example should run locally or on chain
 export enum Environment {
@@ -32,10 +32,10 @@ export interface ExampleConfig {
 // Example Configuration
 
 export const CurrentConfig: ExampleConfig = {
-  env: Environment.LOCAL,
+  env: Environment.WALLET_EXTENSION,
   rpc: {
     local: 'http://localhost:8545',
-    mainnet: '',
+    mainnet: 'https://rpc.ankr.com/eth_goerli',
   },
   wallet: {
     address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
@@ -43,9 +43,9 @@ export const CurrentConfig: ExampleConfig = {
       '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
   },
   tokens: {
-    in: WETH_TOKEN,
-    amountIn: 1,
-    out: USDC_TOKEN,
-    poolFee: FeeAmount.MEDIUM,
+    in: DKFT20_TOKEN,
+    amountIn: 50,
+    out: WETH_TOKEN,
+    poolFee: FeeAmount.LOW,
   },
 }

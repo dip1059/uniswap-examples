@@ -15,11 +15,21 @@ export const WETH_CONTRACT_ADDRESS =
 // Currencies and Tokens
 
 export const WETH_TOKEN = new Token(
-  SupportedChainId.MAINNET,
-  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  // SupportedChainId.MAINNET,
+  // '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  SupportedChainId.GOERLI,
+  '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
   18,
   'WETH',
   'Wrapped Ether'
+)
+
+export const DKFT20_TOKEN = new Token(
+  SupportedChainId.GOERLI,
+  '0x2b669B8dF849a250CB3D228C80CcF21D02F4C5dF',
+  18,
+  'DKFT20',
+  'DK Free Token'
 )
 
 export const USDC_TOKEN = new Token(
@@ -35,6 +45,7 @@ export const USDC_TOKEN = new Token(
 export const ERC20_ABI = [
   // Read-Only Functions
   'function balanceOf(address owner) view returns (uint256)',
+  'function allowance(address owner, address spender) view returns (uint256)',
   'function decimals() view returns (uint8)',
   'function symbol() view returns (string)',
 

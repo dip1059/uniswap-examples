@@ -31,7 +31,7 @@ import {
   sendTransaction,
   TransactionState,
 } from './providers'
-import { fromReadableAmount } from './utils'
+import { fromReadableAmount, toReadableAmount } from './utils'
 
 export type TokenTrade = Trade<Token, Token, TradeType>
 
@@ -73,6 +73,8 @@ export async function createTrade(): Promise<TokenTrade> {
     tradeType: TradeType.EXACT_INPUT,
   })
 
+  console.log('uncheckedTrade: ', uncheckedTrade)
+
   return uncheckedTrade
 }
 
@@ -90,25 +92,28 @@ export async function executeTrade(
   const tokenApproval = await getTokenTransferApproval(CurrentConfig.tokens.in)
 
   // Fail if transfer approvals do not go through
-  if (tokenApproval !== TransactionState.Sent) {
+  if (tokenApproval !== TransactionState.Sent && !tokenApproval) {
     return TransactionState.Failed
   }
 
   const options: SwapOptions = {
-    slippageTolerance: new Percent(50, 10_000), // 50 bips, or 0.50%
+    // slippageTolerance: new Percent(50, 10_000), // 50 bips, or 0.50%
+    slippageTolerance: new Percent(100, 10_000), // 50 bips, or 0.50%
     deadline: Math.floor(Date.now() / 1000) + 60 * 20, // 20 minutes from the current Unix time
     recipient: walletAddress,
   }
 
   const methodParameters = SwapRouter.swapCallParameters([trade], options)
 
+  console.log('methodParameters.calldata: ', methodParameters.calldata)
+
   const tx = {
     data: methodParameters.calldata,
     to: SWAP_ROUTER_ADDRESS,
     value: methodParameters.value,
     from: walletAddress,
-    maxFeePerGas: MAX_FEE_PER_GAS,
-    maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
+    maxFeePerGas: MAX_FEE_PER_GAS.toString(),
+    maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS.toString(),
   }
 
   const res = await sendTransaction(tx)
@@ -150,7 +155,7 @@ async function getOutputQuote(route: Route<Currency, Currency>) {
 
 export async function getTokenTransferApproval(
   token: Token
-): Promise<TransactionState> {
+): Promise<TransactionState | boolean> {
   const provider = getProvider()
   const address = getWalletAddress()
   if (!provider || !address) {
@@ -164,6 +169,21 @@ export async function getTokenTransferApproval(
       ERC20_ABI,
       provider
     )
+
+    let approvedAmount = await tokenContract.allowance(
+      address,
+      SWAP_ROUTER_ADDRESS
+    )
+    if (approvedAmount) {
+      approvedAmount = toReadableAmount(
+        approvedAmount,
+        CurrentConfig.tokens.in.decimals
+      )
+
+      if (approvedAmount >= TOKEN_AMOUNT_TO_APPROVE_FOR_TRANSFER) {
+        return true
+      }
+    }
 
     const transaction = await tokenContract.populateTransaction.approve(
       SWAP_ROUTER_ADDRESS,

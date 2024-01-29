@@ -12,11 +12,29 @@ export const QUOTER_CONTRACT_ADDRESS =
 // Currencies and Tokens
 
 export const WETH_TOKEN = new Token(
-  SupportedChainId.MAINNET,
-  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  // SupportedChainId.MAINNET,
+  // '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  SupportedChainId.GOERLI,
+  '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
   18,
   'WETH',
   'Wrapped Ether'
+)
+
+export const DKFT20_TOKEN = new Token(
+  SupportedChainId.GOERLI,
+  '0x2b669B8dF849a250CB3D228C80CcF21D02F4C5dF',
+  18,
+  'DKFT20',
+  'DK Free Token'
+)
+
+export const GSUC_TOKEN = new Token(
+  SupportedChainId.GOERLI,
+  '0x252D98faB648203AA33310721bBbDdfA8F1b6587',
+  18,
+  'GSUc',
+  'GSU Coin'
 )
 
 export const USDC_TOKEN = new Token(

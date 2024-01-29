@@ -33,7 +33,6 @@ export async function getCurrencyBalance(
   )
   const balance: number = await ERC20Contract.balanceOf(address)
   const decimals: number = await ERC20Contract.decimals()
-
   // Format with proper units (approximate)
   return toReadableAmount(balance, decimals)
 }
@@ -59,8 +58,8 @@ export async function wrapETH(eth: number) {
       .toString(),
     from: address,
     to: WETH_CONTRACT_ADDRESS,
-    maxFeePerGas: MAX_FEE_PER_GAS,
-    maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
+    maxFeePerGas: MAX_FEE_PER_GAS.toString(),
+    maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS.toString(),
   }
 
   await sendTransaction(transaction)
